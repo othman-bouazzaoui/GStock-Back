@@ -294,16 +294,16 @@
 							}
 						},
 						"url": {
-							"raw": "{{server}}:{{port}}/api/v1/products/add",
+							"raw": "http://localhost:8385/api/v1/products",
+							"protocol": "http",
 							"host": [
-								"{{server}}"
+								"localhost"
 							],
-							"port": "{{port}}",
+							"port": "8385",
 							"path": [
 								"api",
 								"v1",
-								"products",
-								"add"
+								"products"
 							]
 						}
 					},
@@ -317,7 +317,8 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{accesToken}}",
-								"type": "default"
+								"type": "default",
+								"disabled": true
 							}
 						],
 						"body": {
@@ -356,15 +357,6 @@
 								"type": "default"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\" : 1,\r\n    \"name\" : \"Dell\",\r\n    \"price\" : 100.0,\r\n    \"category\" : 2\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "{{server}}:{{port}}/api/v1/products/delete/1",
 							"host": [
@@ -1010,8 +1002,8 @@
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"console.log(jsonData);\r",
-							"pm.environment.set(\"accesToken\", jsonData.accesToken);\r",
-							"pm.environment.set(\"refreshToken\", jsonData.refreshToken);"
+							"pm.environment.set(\"accesToken\", jsonData.acces_Token);\r",
+							"pm.environment.set(\"refreshToken\", jsonData.refresh_Token);"
 						],
 						"type": "text/javascript"
 					}
@@ -1074,8 +1066,8 @@
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"console.log(jsonData);\r",
-							"pm.environment.set(\"accesToken\", jsonData.accesToken);\r",
-							"pm.environment.set(\"refreshToken\", jsonData.refreshToken);"
+							"pm.environment.set(\"accesToken\", jsonData.acces_Token);\r",
+							"pm.environment.set(\"refreshToken\", jsonData.refresh_Token);"
 						],
 						"type": "text/javascript"
 					}
@@ -1090,6 +1082,70 @@
 						{
 							"key": "username",
 							"value": "User",
+							"type": "default"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8385/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8385",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "authenticate with Othman",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"console.log(pm.request.body.urlencoded.each(e => console.log(e)));\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"console.log(jsonData);\r",
+							"pm.environment.set(\"accesToken\", jsonData.acces_Token);\r",
+							"pm.environment.set(\"refreshToken\", jsonData.refresh_Token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "Othman",
 							"type": "default"
 						},
 						{
@@ -1137,7 +1193,7 @@
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"console.log(\"From Refresh Token : \" + jsonData);\r",
-							"pm.environment.set(\"accesToken\", jsonData.accesToken);"
+							"pm.environment.set(\"accesToken\", jsonData.acces_Token);"
 						],
 						"type": "text/javascript"
 					}

@@ -29,6 +29,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tawdi7atnet.security.entities.UserEntity;
 import com.tawdi7atnet.security.service.UserService;
+import com.tawdi7atnet.security.util.JwtUtil;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -74,11 +75,11 @@ public class UserController {
 	@GetMapping("/refreshToken")
 	public void rehreshToken(HttpServletRequest request,HttpServletResponse response) throws IOException {
 
-		String authorizationToken = request.getHeader("Authorization");
-		if(authorizationToken != null && authorizationToken.startsWith("Bearer ")) {
+		String authorizationToken = request.getHeader(JwtUtil.AUTHORIZATION);
+		if(authorizationToken != null && authorizationToken.startsWith(JwtUtil.PREFIX)) {
 			try {
 			String jwt = authorizationToken.substring(7);
-			Algorithm algorithm = Algorithm.HMAC256("Othman1995");
+			Algorithm algorithm = Algorithm.HMAC256(JwtUtil.SECRET);
 			
 			JWTVerifier jwtVerifier = JWT.require(algorithm).build();
 			
@@ -97,7 +98,7 @@ public class UserController {
 					.sign(algorithm);
 			
 			Map<String, String> idToken = new HashMap<>();
-			idToken.put("accesToken", accesToken);
+			idToken.put("acces_Token", accesToken);
 			
 			response.setContentType("application/json");
 			

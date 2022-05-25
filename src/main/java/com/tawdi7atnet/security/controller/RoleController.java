@@ -2,10 +2,6 @@ package com.tawdi7atnet.security.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

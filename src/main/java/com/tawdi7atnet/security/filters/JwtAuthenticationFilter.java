@@ -24,6 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tawdi7atnet.security.util.JwtUtil;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -61,11 +62,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		User user = (User) authResult.getPrincipal();
 		LOG.info("User : " + user);
 
-		Algorithm algorithm = Algorithm.HMAC256("Othman1995");
+		Algorithm algorithm = Algorithm.HMAC256(JwtUtil.SECRET);
 		
 		/* Access Token */
 		String accesToken = JWT.create().withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60))
+				.withExpiresAt(new Date(JwtUtil.EXPIRE_ACCES_TOKEN))
 				.withIssuer(request.getRequestURL().toString())
 				.withClaim("roles",
 						user.getAuthorities().stream().map(ga -> ga.getAuthority()).collect(Collectors.toList()))
@@ -79,19 +80,19 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		 * Expire after 1 Year
 		 */
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.YEAR, +1);
+		calendar.add(Calendar.YEAR, +JwtUtil.EXPIRE_REFRESH_TOKEN);
 		
 		String refreshToken = JWT.create().withSubject(user.getUsername())
 				.withExpiresAt(new Date(calendar.getTimeInMillis()))
 				.withIssuer(request.getRequestURL().toString())
 				.sign(algorithm);
 
-		LOG.info("accesToken : {}",accesToken);
-		LOG.info("refreshToken : {}",refreshToken);
+		LOG.info("acces_Token : {}",accesToken);
+		LOG.info("refresh_Token : {}",refreshToken);
 		
 		Map<String, String> idToken = new HashMap<>();
-		idToken.put("accesToken", accesToken);
-		idToken.put("refreshToken", refreshToken);
+		idToken.put("acces_Token", accesToken);
+		idToken.put("refresh_Token", refreshToken);
 		
 		response.setContentType("application/json");
 		

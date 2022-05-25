@@ -21,6 +21,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.tawdi7atnet.security.util.JwtUtil;
 
 /*
  * Ce filter s'execute a chaque fois qu'on demande une ressource
@@ -34,17 +35,18 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
-		if (request.getServletPath().equals("/api/v1/users/refreshToken") || request.getServletPath().equals("/login")) {
+		if (JwtUtil.AUTHENTICATS_PATHS.contains(request.getServletPath()) ) {
 
 			// passe au filter suivant
 			filterChain.doFilter(request, response);
+			
 		} else {
 
-			String authorizationToken = request.getHeader("Authorization");
-			if (authorizationToken != null && authorizationToken.startsWith("Bearer ")) {
+			String authorizationToken = request.getHeader(JwtUtil.AUTHORIZATION);
+			if (authorizationToken != null && authorizationToken.startsWith(JwtUtil.PREFIX)) {
 				try {
 					String jwt = authorizationToken.substring(7);
-					Algorithm algorithm = Algorithm.HMAC256("Othman1995");
+					Algorithm algorithm = Algorithm.HMAC256(JwtUtil.SECRET);
 					JWTVerifier jwtVerifier = JWT.require(algorithm).build();
 					DecodedJWT verify = jwtVerifier.verify(jwt);
 

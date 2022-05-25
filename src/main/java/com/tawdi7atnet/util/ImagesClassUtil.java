@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
+
+/*
+ * Author : Othman BOUAZZAOUI
+ * description : Class Util to compresse and decmpresse images files
+ */
 public final class ImagesClassUtil {
     // compress the image bytes before storing it in the database
     public static byte[] compressZLib(byte[] data) {
@@ -22,7 +27,6 @@ public final class ImagesClassUtil {
             outputStream.close();
         } catch (IOException e) {
         }
-        System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
 
         return outputStream.toByteArray();
     }

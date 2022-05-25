@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.tawdi7atnet.security.filters.JwtAuthenticationFilter;
 import com.tawdi7atnet.security.filters.JwtAuthorizationFilter;
 import com.tawdi7atnet.security.service.UserDetailsServiceSpec;
+import com.tawdi7atnet.security.util.JwtUtil;
 
 @EnableWebSecurity
 @Configuration
@@ -39,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 
 		http.csrf().disable()
-			.authorizeRequests().antMatchers("/login","/v3/api-docs/**","/swagger-ui/**","/h2-console/**","/api/v1/users/refreshToken").permitAll()
+			.authorizeRequests().antMatchers(JwtUtil.AUTHORIZED_PATHS).permitAll()
 			//.antMatchers(HttpMethod.GET,"/api/v1/users/**").hasAuthority("ADMIN")
 			.anyRequest().authenticated()
 			.and().sessionManagement()
